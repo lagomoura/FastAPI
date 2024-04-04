@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel  # Manejo de herencia
 from sqlalchemy.orm import Session
 from sql_app.dependencias import get_db
-from sql_app.models import *
+from sql_app.models import Image, ImagesTratadas
 
 #! Enrutador llamado router con un prefijo de URL "/microservicios/email_detector" para manejar los endpoints relacionados al microservicios
 router = APIRouter(prefix="/microservicios/email_detector")
@@ -22,7 +22,7 @@ class DetectarEmailImg_Response(BaseModel):
     status: bool
 
 #! Indica que el método manejará las solicitudes GET en la ruta "/" del enrutador. La respuesta de este endpoint será una lista de objetos de tipo DetectarEmailImg_Response.  
-@router.get("/", response_model=List[DetectarEmailImg_Response], status_code=200)
+@router.get("/{id}", response_model=List[DetectarEmailImg_Response], status_code=200)
 def detectar_email_img(id:int, path:str, status:bool):
     return [
         DetectarEmailImg_Response(
@@ -38,13 +38,11 @@ def cargar_img(image: DetectarEmailImg_Request, db: Session = Depends(get_db)):
 
     db_img = Image(path=image.path, status=False)
 
-
-    # guardar img en carpeta
-    # quede registro en bd con img subida con id vinculado - devolver id
-    # ver sistema de cola para la respuesta
-    
     db.add(db_img)
     db.commit()
-    db.refresh(db_img)
+    
+        #todo guardar img en carpeta
+        #todo quede registro en bd con img subida con id vinculado - devolver id
+        #todo ver sistema de cola para la respuesta
     
     return db_img
