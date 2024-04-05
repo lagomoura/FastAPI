@@ -10,6 +10,12 @@ class Image(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     path = Column(String, unique=True, nullable=False, index=True)
     status = Column(Boolean, default=False)
+    #tags = Column(String, nullable=True) crear columna tipo json - array vacio como valor por defecto
+    #una sola entidad (uno uno) con status default false y una vez detectado cambiara true
+    
+    #! uuid - ver tema id
+    
+    
 
     images_tratadas = relationship("ImagesTratadas", back_populates="owner")
 

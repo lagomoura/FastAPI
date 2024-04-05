@@ -27,8 +27,13 @@ def detectar_email_img(id:int, path:str, status:bool):
     return [
         DetectarEmailImg_Response(
             id = id,
-            path= path,
+            path= path, #cambiar la variable url
             status=status  # Detectado o no
+            
+            
+            #tags
+            #! una sola bd para todos los servicios y agregar una columna tags para identificar las detecciones realizadas
+            #mandar el ID de la imagen detectada
         )
     ]
 
@@ -40,7 +45,9 @@ def cargar_img(image: DetectarEmailImg_Request, db: Session = Depends(get_db)):
 
     db.add(db_img)
     db.commit()
-    
+        
+        #todo hacer el post a traves de un form
+        # https://fastapi.tiangolo.com/tutorial/request-files/
         #todo guardar img en carpeta
         #todo quede registro en bd con img subida con id vinculado - devolver id
         #todo ver sistema de cola para la respuesta

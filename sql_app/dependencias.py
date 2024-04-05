@@ -5,7 +5,7 @@ from sql_app.database import SessionLocal
 def get_db():
     db = SessionLocal()
     try:
-        yield db #! yield se utiliza para devolver la instancia de la base de datos db cuando la sea llamada.
+        yield db #! yield se utiliza para devolver la instancia de la base de datos db cuando sea llamada.
     finally: 
         db.close()
 

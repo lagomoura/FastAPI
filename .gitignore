@@ -1,1 +1,5 @@
-/entorno_virtual
+/FastAPI/__pycache__
+/FastAPI/microservicios/routers/__pycache__
+/FastAPI/microservicios/services/__pycache__
+/FastAPI/sql_app/__pycache__
+/FastAPI/test/email_detector/routers/__pycache__
