@@ -1,44 +1,27 @@
-import easyocr
 import re
-import json
+import easyocr
 
-reader = easyocr.Reader(['es','en'], gpu=True) # this needs to run only once to load the model into memory
+reader = easyocr.Reader(['es','en'], gpu=False) # Esto solo necesita ejecutarse una vez para cargar el modelo en memoria
 
 def detectar_email(texto):
-  #.Regex para deteccion de correo
-  patron_email = r'\b[A-Za-z0-9._%+-]*[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    # Patrón de regex para detección de correos electrónicos
+    patron_email = r'\b[A-Za-z0-9._%+-]*[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    correos_encontrados = re.findall(patron_email, texto)
+    return correos_encontrados
 
-  correos_encontrados = re.findall(patron_email, texto)
-
-  return correos_encontrados
-
-def email_detector(resultado):
-  resultado_email = []
-  
-  for ubicacion, texto, accuracy in resultado:
-    if " com" in texto:
-      texto = texto.replace(" com", ".com")
-
-    emails = detectar_email(texto)
+def email_detector(path):
+    for ubicacion, texto, accuracy in path:
+        if " com" in texto:
+            texto = texto.replace(" com", ".com")
+        emails = detectar_email(texto)
+        if emails:
+            return f"Detectado: {emails[0]}"
     
-    print(emails)
-
-    if len(emails) > 0:
-      resultado_email.append({
-        "Email": emails[0],
-        "Ubicacion" : ubicacion,
-        "Accuracy" : round(accuracy * 100)
-      })
-
-    else:
-      print("Sin deteccion de email")
-    
-  return resultado_email
+    return "La imagen no contiene correos electrónicos detectados"
 
 def main():
-  resultado = reader.readtext('src/imgs/text2.jpeg')
-  email_detector(resultado)
+    path = reader.readtext('src/imgs/text2.jpeg')
+    resultado = email_detector(path)
+    print(resultado)
 
-#resultado_json = json.dumps(main())
-
-#print(resultado_json)
+main()
