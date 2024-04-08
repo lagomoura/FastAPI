@@ -6,6 +6,7 @@ from pydantic import BaseModel  # Manejo de herencia
 from sqlalchemy.orm import Session
 from sql_app.dependencias import get_db
 from sql_app.models import Image, ImagesTratadas
+from fastapi import File, UploadFile
 
 #! Enrutador llamado router con un prefijo de URL "/microservicios/email_detector" para manejar los endpoints relacionados al microservicios
 router = APIRouter(prefix="/microservicios/email_detector")
@@ -39,17 +40,21 @@ def detectar_email_img(id:int, path:str, status:bool):
 
 #! Maneja las solicitudes POST en la ruta "/" del enrutador. El parámetro response_model especifica que la respuesta de este endpoint será un objeto de tipo DetectarEmailImg_Response, y devolverá un código de estado HTTP 201 (Created) en la respuesta.
 @router.post("/", response_model=DetectarEmailImg_Request, status_code=201)
-def cargar_img(image: DetectarEmailImg_Request, db: Session = Depends(get_db)):
-
-    db_img = Image(path=image.path, status=False)
-
-    db.add(db_img)
-    db.commit()
+def cargar_img(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    # Guardar img en carpeta
+    with open(f"src/imgs/{file.filename}", "wb") as buffer:
+        buffer.write(file.file.read())
         
-        #todo hacer el post a traves de un form
-        # https://fastapi.tiangolo.com/tutorial/request-files/
-        #todo guardar img en carpeta
-        #todo quede registro en bd con img subida con id vinculado - devolver id
-        #todo ver sistema de cola para la respuesta
+        
+        db_img = Image(path=f"src/imgs/{file.filename}", status=False)
+
+        db.add(db_img)
+        db.commit()
+            
+            #todo hacer el post a traves de un form
+            # https://fastapi.tiangolo.com/tutorial/request-files/
+            #todo guardar img en carpeta
+            #todo quede registro en bd con img subida con id vinculado - devolver id
+            #todo ver sistema de cola para la respuesta
     
-    return db_img
+    return DetectarEmailImg_Response(id=db_img.id, path=db_img.path, status=db_img.status)
