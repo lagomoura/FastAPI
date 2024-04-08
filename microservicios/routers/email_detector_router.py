@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel  # Manejo de herencia
 from sqlalchemy.orm import Session
 from sql_app.dependencias import get_db
-from sql_app.models import Image, ImagesTratadas
+from sql_app.models import Image
 from fastapi import File, UploadFile
 
 #! Enrutador llamado router con un prefijo de URL "/microservicios/email_detector" para manejar los endpoints relacionados al microservicios
@@ -51,10 +51,8 @@ def cargar_img(file: UploadFile = File(...), db: Session = Depends(get_db)):
         db.add(db_img)
         db.commit()
             
-            #todo hacer el post a traves de un form
+            
             # https://fastapi.tiangolo.com/tutorial/request-files/
-            #todo guardar img en carpeta
-            #todo quede registro en bd con img subida con id vinculado - devolver id
             #todo ver sistema de cola para la respuesta
     
     return DetectarEmailImg_Response(id=db_img.id, path=db_img.path, status=db_img.status)
