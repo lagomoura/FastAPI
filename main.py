@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from microservicios.routers import email_detector_router
 from sql_app.database import engine, Base
 
+
 Base.metadata.create_all(bind=engine)
 
 #! Aplicacion FastAPI

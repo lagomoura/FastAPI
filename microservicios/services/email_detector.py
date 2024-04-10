@@ -10,18 +10,15 @@ def detectar_email(texto):
     return correos_encontrados
 
 def email_detector(path):
-    for ubicacion, texto, accuracy in path:
+    path_info = reader.readtext(path)
+    
+    for ubicacion, texto, accuracy in path_info:
         if " com" in texto:
             texto = texto.replace(" com", ".com")
-        emails = detectar_email(texto)
-        if emails:
-            return f"Detectado: {emails[0]}"
-    
-    return "La imagen no contiene correos electrónicos detectados"
-
-def main():
-    path = reader.readtext('src/imgs/text2.jpeg')
-    resultado = email_detector(path)
-    print(resultado)
-
-main()
+        if detectar_email(texto):
+            email_detectado = True
+            break
+        else:
+            email_detectado = False
+            
+    return email_detectado
