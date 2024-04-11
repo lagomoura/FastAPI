@@ -7,12 +7,12 @@ class Image(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     path = Column(String, unique=True, nullable=False, index=True)
-    status = Column(Boolean, default=False)
+    detectado = Column(Boolean, default=False)
     tags = Column(JSON, nullable=True)
     
-    def __init__(self, path:str, status:bool, tags:list = None):
+    def __init__(self, path:str, detectado:bool, tags:list = []):
         self.path = path
-        self.status = status
-        self.tags = tags if tags else []
+        self.detectado = detectado
+        self.tags = tags if tags is not None else []
     
     #! uuid - ver tema id

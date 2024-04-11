@@ -11,14 +11,14 @@ def test_cargar_img():
     assert response.json() == [
         {'file_name': 'img_name',
         'path': 'img_path',
-        'status': False}
+        'detectado': False}
     ]
 
 def test_detectar_email_img():
   nueva_img = {
     "file_name" : "file_name",
     "path" : "path",
-    "status": True
+    "detectado": True
   }
   
   response = cliente.post("/microservicios/email_detector", json=nueva_img)
