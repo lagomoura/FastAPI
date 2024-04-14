@@ -10,6 +10,7 @@ def detectar_email(texto):
     return correos_encontrados
 
 def email_detector(path):
+    email_detectado = False
     path_info = reader.readtext(path)
     
     for ubicacion, texto, accuracy in path_info:
@@ -18,7 +19,5 @@ def email_detector(path):
         if detectar_email(texto):
             email_detectado = True
             break
-        else:
-            email_detectado = False
             
     return email_detectado
