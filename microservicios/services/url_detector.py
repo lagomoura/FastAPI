@@ -9,18 +9,17 @@ def detectar_url(texto):
 
   return urls_encontradas
 
-#.upload foto
-result = reader.readtext('/content/text.jpeg')
 
-for ubicacion, texto, accuracy in result:
+def url_detector(path):
+  url_detectado = False
+  path_info = reader.readtext(path)
 
-  urls = detectar_url(texto)
+  for ubicacion, texto, accuracy in path_info:
 
-  if urls:
-    print(f"URL encontrada: {urls}")
-    print(f"Ubicacion del texto: {ubicacion}")
-    print(texto)
-    print(f"Accuracy de deteccion: {(accuracy * 100).round()}%")
+    if detectar_url(texto):
+      url_detectado = True
+      break
+  
+  return url_detectado
 
-if len(result) == 0:
-  print("Imagen sin URLs")
+  
