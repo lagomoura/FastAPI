@@ -3,6 +3,7 @@ fastapi==0.110.0
 uvicorn==0.29.0
 easyocr==1.7.1
 python-multipart==0.0.9
+pytesseract==0.3.10
 
 #. Tests
 requests==2.31.0

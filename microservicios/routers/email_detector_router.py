@@ -25,7 +25,7 @@ def detectar_email_img(id:str, db:Session = Depends(get_db)):
             image.services = service_tag
             
         else:
-            return {"message":"el procesamiento de deteccion de emails ya ha sido realizado sobre esa imagen"}
+            return {"message":"El procesamiento de deteccion de emails ya ha sido realizado sobre esa imagen"}
     
         if email_detectados:   
             email_tag = ["EMAIL_detected"]

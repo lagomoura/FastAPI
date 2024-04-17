@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from microservicios.routers import email_detector_router, url_detector_router, static
+from microservicios.routers import email_detector_router, url_detector_router, static, address_phone_detector_router
 from sql_app.database import engine, Base
 
 Base.metadata.create_all(bind=engine)
@@ -18,3 +18,4 @@ def root_index():
 app.include_router(static.router)
 app.include_router(email_detector_router.router)
 app.include_router(url_detector_router.router)
+app.include_router(address_phone_detector_router.router)
