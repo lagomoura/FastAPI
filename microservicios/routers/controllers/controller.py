@@ -1,4 +1,4 @@
-from .clases import BaseImg_Response
+from ..Models.models import BaseImg_Response
 from sql_app.models import Image
 from fastapi import File, UploadFile
 import uuid

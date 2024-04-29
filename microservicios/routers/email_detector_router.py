@@ -11,7 +11,7 @@ from microservicios.services.email_detector import email_detector
 #! Enrutador llamado router con un prefijo de URL "/microservicios
 router = APIRouter(prefix="/microservicios")
 
-@router.get("/email_detector.router/detectar_email/{id}", status_code=200)
+@router.get("/email_detector/detectar_email/{id}", status_code=200)
 def detectar_email_img(id:str, db:Session = Depends(get_db)):
     
     image = db.query(Image).filter(Image.id == id).first()

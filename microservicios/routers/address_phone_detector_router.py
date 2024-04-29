@@ -10,7 +10,7 @@ from microservicios.services.address_phone_detector import address_phone_detecto
 
 router = APIRouter(prefix="/microservicios")
 
-@router.get("/address_phone_detector.router/address_phone_detector{id}", status_code=200)
+@router.get("/address_phone_detector/address_phone_detector{id}", status_code=200)
 def detector_direccion_telefono(id:str, db:Session = Depends(get_db)):
   
   image = db.query(Image).filter(Image.id == id).first()

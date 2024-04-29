@@ -7,7 +7,7 @@ from microservicios.services.url_detector import url_detector
 
 router = APIRouter(prefix = "/microservicios")
 
-@router.get("/url_detector.router/detectar_url/{id}", status_code=200)
+@router.get("/url_detector/detectar_url/{id}", status_code=200)
 def detectar_url_img(id: str, db:Session = Depends(get_db)):
   
   image = db.query(Image).filter(Image.id == id).first()
