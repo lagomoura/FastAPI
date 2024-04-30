@@ -3,6 +3,10 @@ fastapi==0.110.0
 uvicorn==0.29.0
 easyocr==1.7.1
 python-multipart==0.0.9
+clip @ git+https://github.com/openai/CLIP.git@a1d071733d7111c9c014f024669f959182114e33
+torch==2.2.2
+torchvision==0.17.2
+transformers==4.40.1
 pytesseract==0.3.10
 
 #. Tests
