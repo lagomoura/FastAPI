@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from microservicios.routers import email_detector_router, url_detector_router, address_phone_detector_router, texto_marcaAgua_detector_router, human_nsfw_detector_router
+from microservicios.routers import email_detector_router, url_detector_router, address_phone_detector_router, texto_marcaAgua_detector_router, human_nsfw_detector_router, qr_detector_router
+
 from microservicios.routers.controllers import controller
 from sql_app.database import engine, Base
 
@@ -22,3 +23,4 @@ app.include_router(url_detector_router.router)
 app.include_router(address_phone_detector_router.router)
 app.include_router(texto_marcaAgua_detector_router.router)
 app.include_router(human_nsfw_detector_router.router)
+app.include_router(qr_detector_router.router)

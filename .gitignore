@@ -3,3 +3,4 @@
 /FastAPI/microservicios/services/__pycache__
 /FastAPI/sql_app/__pycache__
 /FastAPI/test/email_detector/routers/__pycache__
+/microservicios/routers/controllers/__pycache__
