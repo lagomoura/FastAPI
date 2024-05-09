@@ -42,7 +42,7 @@ def detectar_texto_img(id: str, db: Session = Depends(get_db)):
         new_image_tag_association = ImageTagAssociation(
             image_id=id, tags_id=servicio_realizado.id, detected=False)
 
-        db.add(image)
+        db.add(new_image_tag_association)
         db.commit()
 
         return {f"message": "No se detectaron textos en la imagen"}
