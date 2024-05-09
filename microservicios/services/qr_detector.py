@@ -40,6 +40,7 @@ def qr_detector(path):
         qr_detectado = True
         img = efecto_blur(img, puntos)
         print('Blur aplicado')
+        
         # .Creando carpeta
         carpeta_destino = 'src/imgs_qr_blur'
         if not os.path.exists(carpeta_destino):
@@ -49,9 +50,5 @@ def qr_detector(path):
         nombre_img = f"img_qr_detectado.{tag_tiempo}.jpg"
         ruta_img = os.path.join(carpeta_destino, nombre_img)
         cv2.imwrite(ruta_img, img)
-
-        print('Imagen guardada')
-    else:
-        print("Sin QRs detectados")
 
     return qr_detectado

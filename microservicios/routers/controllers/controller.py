@@ -18,8 +18,6 @@ def obtener_info_image(id:str, db: Session = Depends(get_db)):
         
         return BaseImg_Response(
             id = image.id,
-            tags = image.tags, 
-            services = image.services,
             path = image.path
         )
     
@@ -33,8 +31,8 @@ def cargar_img(file: UploadFile = File(...), db: Session = Depends(get_db)):
     
     with open(f"src/imgs/{file.filename}", "wb") as buffer:
         buffer.write(file.file.read())
-        db_img = Image(id=str(uuid.uuid4()), path=f"src/imgs/{file.filename}", tags=[], services=[])
+        db_img = Image(id=str(uuid.uuid4()), path=f"src/imgs/{file.filename}")
         db.add(db_img)
         db.commit()
 
-    return BaseImg_Response(id=db_img.id, tags=db_img.tags, path=db_img.path, services=db_img.services)       
+    return BaseImg_Response(id=db_img.id, path=db_img.path)       

@@ -1,0 +1,1 @@
+# Este archivo es necesario para que Python reconozca sql_app como un paquete.

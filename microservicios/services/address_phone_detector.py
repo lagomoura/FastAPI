@@ -1,15 +1,21 @@
 import cv2
 import pytesseract
 import re
+from PIL import Image
 
+#! NO ESTA UBICANDO TESSERACT
 
 def address_phone_detector(img_path):
+    
+    img = cv2.imread(img_path)
 
-    img_gris = cv2.cvtColor(img_path, cv2.COLOR_BGR2GRAY)
+    img_gris = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Umbralizacion
     thresh = cv2.threshold(
         img_gris, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+    pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract'
 
     # Detectando texto
     texto = pytesseract.image_to_string(thresh)
