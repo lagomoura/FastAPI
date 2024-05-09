@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sql_app.dependencias import get_db
-from sql_app.models import Image
 
 from microservicios.services.texto_waterMark_detector import detectar_texto
+from sql_app.dependencias import get_db
+from sql_app.models import Image, ImageTagAssociation, Tags
 
 router = APIRouter(prefix="/microservicios")
 
@@ -13,28 +13,36 @@ def detectar_texto_img(id: str, db: Session = Depends(get_db)):
 
     image = db.query(Image).filter(Image.id == id).first()
 
-    if image:
-        path = image.path
-        texto_detectados = detectar_texto(path)
-        service_tag = ["TEXTO_DETECTOR"]
-
-        if "TEXTO_DETECTOR" not in image.services:
-            image.services = service_tag
-
-        else:
-            return {"message": "el procesamiento de deteccion de textos/marcas de Agua ya ha sido realizado sobre esa imagen"}
-
-        if texto_detectados:
-            url_tag = ["TEXTO_detected"]
-            image.tags = url_tag
-
-            db.add(image)
-            db.commit()
-
-            return {"message": "Deteccion de texto/marca de agua realizada exitosamente"}
-        else:
-            db.add(image)
-            db.commit()
-            return {f"message": "No se detectaron textos en la imagen"}
-    else:
+    if not image:
         raise HTTPException(status_code=404, detail="Imagen no encontrada")
+
+    image_tag_association = db.query(ImageTagAssociation).filter(
+        ImageTagAssociation.image_id == id).first()
+
+    if image_tag_association and image_tag_association.detected == True:
+        return {"message": "el procesamiento de deteccion de textos y marcas de agua ya ha sido realizado sobre esa imagen"}
+
+    path = image.path
+    texto_detectados = detectar_texto(path)
+
+    if texto_detectados:
+        servicio_realizado = db.query(Tags).filter(
+            Tags.tag_service == "Text_waterMark_detected").first()
+        new_image_tag_association = ImageTagAssociation(
+            image_id=id, tags_id=servicio_realizado.id, detected=True)
+
+        db.add(new_image_tag_association)
+        db.commit()
+
+        return {"message": "Deteccion de textos y marcas de agua realizada exitosamente"}
+
+    else:
+        servicio_realizado = db.query(Tags).filter(
+            Tags.tag_service == "Text_waterMark_detected").first()
+        new_image_tag_association = ImageTagAssociation(
+            image_id=id, tags_id=servicio_realizado.id, detected=False)
+
+        db.add(image)
+        db.commit()
+
+        return {f"message": "No se detectaron textos en la imagen"}
