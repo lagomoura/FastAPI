@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sql_app.dependencias import get_db
-from sql_app.models import Image
 
 from microservicios.services.fondos_transparentes import quitar_fondos
+from sql_app.dependencias import get_db
+from sql_app.models import Image, ImageTagAssociation, Tags
 
 router = APIRouter(prefix="/microservicios")
 
@@ -13,24 +13,27 @@ def quitar_fondo_img(id: str, db: Session = Depends(get_db)):
 
     image = db.query(Image).filter(Image.id == id).first()
 
-    if image:
-        path = image.path
-        fondo_quitado = quitar_fondos(path)
-        service_tag = ["BG_Remover"]
-
-        if "BG_Remover" not in image.services:
-            image.services = service_tag
-
-        #else:
-            #return {"message": "el procesamiento de remocion de background ya ha sido realizado sobre esa imagen"}
-
-        if fondo_quitado:
-            fondo_tag = ["BG_removido"]
-            image.tags = fondo_tag
-
-            db.add(image)
-            db.commit()
-
-            return {"message": "Background removido exitosamente - La nueva imagen con BG transparente ha sido guardada en carpeta local"}
-    else:
+    if not image:
         raise HTTPException(status_code=404, detail="Imagen no encontrada")
+
+    image_tag_associatin = db.query(ImageTagAssociation).filter(
+        ImageTagAssociation.image_id == id).first()
+
+    if image_tag_associatin and image_tag_associatin.detected == True:
+        return {"message": "el procesamiento de remocion de background ya ha sido realizado sobre esa imagen"}
+
+    path = image.path
+    fondo_quitado = quitar_fondos(path)
+
+    if fondo_quitado:
+        servicio_realizado = db.query(Tags).filter(
+            Tags.tag_service == "BG_removed").first()
+        new_image_tag_association = ImageTagAssociation(
+            image_id=id, tags_id=servicio_realizado.id, detected=True)
+
+        db.add(new_image_tag_association)
+        db.commit()
+
+        return {"message": "Background removido exitosamente - La nueva imagen con BG transparente ha sido guardada en carpeta local"}
+    else:
+        return {"message": "Tuvimos problemas en remover el bg de la imagen"}
