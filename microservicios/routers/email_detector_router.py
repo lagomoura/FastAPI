@@ -41,4 +41,11 @@ def detectar_email_img(id: str, db: Session = Depends(get_db)):
         return {"message": "Deteccion de emails realizada exitosamente"}
 
     else:
+        servicio_realizado = db.query(Tags).filter(
+        Tags.tag_service == "Email_detected").first()
+        new_image_tag_association = ImageTagAssociation(
+            image_id=id, tags_id=servicio_realizado.id, detected=False)
+
+        db.add(new_image_tag_association)
+        db.commit()
         return {f"message": "No se detectaron emails en la imagen"}
