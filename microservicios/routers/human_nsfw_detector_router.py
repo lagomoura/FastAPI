@@ -50,7 +50,7 @@ def detectar_humano_nsfw_img(id: str, db: Session = Depends(get_db)):
         return {"message": "Deteccion de Humano realizada exitosamente. Sin contenido NSFW"}
     else:
         servicio_realizado = db.query(Tags).filter(
-        Tags.tag_service == "Human_detected").first()
+            Tags.tag_service == "Human_detected").first()
         new_image_tag_association = ImageTagAssociation(
             image_id=id, tags_id=servicio_realizado.id, detected=False)
 
