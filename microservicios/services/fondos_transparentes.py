@@ -26,12 +26,13 @@ def quitar_fondos(path):
 
   #! ACA TENGO PROBLEMA. GUARDAR EL IMAGEN EN FORMATO PNG.
     #.Guardando img en formato .png
-    ruta_salida = os.path.join(carpeta_destino, os.path.splitext(input_array[0] + '.png'))
+    
+    print(output_img)
+    
+    ruta_salida = os.path.join(carpeta_destino, os.path.splitext(os.path.basename(path))[0] + '.png')
     output_img.save(ruta_salida)
-      
-  
+    
     fondo_quitado = True
-    print(fondo_quitado)
     
   return fondo_quitado
 
